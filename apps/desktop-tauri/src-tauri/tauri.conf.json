@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "llm-ping",
+  "version": "0.1.0",
+  "identifier": "dev.llm-ping.desktop",
+  "build": {
+    "beforeDevCommand": "pnpm --filter @llm-ping/web dev",
+    "beforeBuildCommand": "pnpm --filter @llm-ping/web build",
+    "devUrl": "http://127.0.0.1:5173",
+    "frontendDist": "../../../packages/web/dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "llm-ping",
+        "width": 1280,
+        "height": 820
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all"
+  }
+}

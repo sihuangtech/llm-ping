@@ -1,0 +1,28 @@
+providers:
+  - id: openai-main
+    name: OpenAI Main
+    type: openai
+    enabled: true
+    baseUrl: https://api.openai.com
+    apiKey: ${OPENAI_API_KEY}
+    model: gpt-4o-mini
+    timeoutMs: 15000
+    retries: 1
+    strictModelCheck: true
+    skipModelList: false
+    streaming: false
+    customPrompt: "Reply with exactly: pong"
+    headers: {}
+  - id: ollama-local
+    name: Local Ollama
+    type: ollama
+    enabled: true
+    baseUrl: http://localhost:11434
+    model: llama3.2
+    timeoutMs: 15000
+    retries: 0
+    strictModelCheck: false
+    skipModelList: false
+    streaming: false
+    customPrompt: "Reply with exactly: pong"
+    headers: {}

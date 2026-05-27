@@ -1,0 +1,53 @@
+import type { CheckResult, ProviderCapability, ProviderConfig } from "@llm-ping/shared";
+export declare const api: {
+    capabilities: () => Promise<ProviderCapability[]>;
+    providers: () => Promise<{
+        type: "openai" | "openai-compatible" | "anthropic" | "gemini" | "azure-openai" | "vertex-gemini" | "ollama" | "lm-studio" | "localai" | "custom";
+        id: string;
+        name: string;
+        enabled: boolean;
+        timeoutMs: number;
+        retries: number;
+        strictModelCheck: boolean;
+        skipModelList: boolean;
+        streaming: boolean;
+        customPrompt: string;
+        headers: Record<string, string>;
+        baseUrl?: string | undefined;
+        apiKey?: string | undefined;
+        accessToken?: string | undefined;
+        model?: string | undefined;
+        deployment?: string | undefined;
+        apiVersion?: string | undefined;
+        projectId?: string | undefined;
+        location?: string | undefined;
+    }[]>;
+    saveProvider: (provider: ProviderConfig) => Promise<{
+        type: "openai" | "openai-compatible" | "anthropic" | "gemini" | "azure-openai" | "vertex-gemini" | "ollama" | "lm-studio" | "localai" | "custom";
+        id: string;
+        name: string;
+        enabled: boolean;
+        timeoutMs: number;
+        retries: number;
+        strictModelCheck: boolean;
+        skipModelList: boolean;
+        streaming: boolean;
+        customPrompt: string;
+        headers: Record<string, string>;
+        baseUrl?: string | undefined;
+        apiKey?: string | undefined;
+        accessToken?: string | undefined;
+        model?: string | undefined;
+        deployment?: string | undefined;
+        apiVersion?: string | undefined;
+        projectId?: string | undefined;
+        location?: string | undefined;
+    }>;
+    deleteProvider: (id: string) => Promise<{
+        ok: boolean;
+    }>;
+    checkProvider: (id: string) => Promise<CheckResult>;
+    checkAll: () => Promise<CheckResult[]>;
+    history: () => Promise<CheckResult[]>;
+    exportUrl: (format: string) => string;
+};

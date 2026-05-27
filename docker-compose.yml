@@ -1,0 +1,9 @@
+services:
+  llm-ping:
+    build: .
+    ports:
+      - "127.0.0.1:4545:4545"
+    volumes:
+      - ./data:/app/data
+    environment:
+      LLM_PING_DB: /app/data/llm-ping.db

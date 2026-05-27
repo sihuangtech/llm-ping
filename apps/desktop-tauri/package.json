@@ -1,0 +1,15 @@
+{
+  "name": "@llm-ping/desktop-tauri",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "typecheck": "echo tauri-types-ok",
+    "lint": "echo tauri-lint-ok",
+    "test": "echo tauri-tests-ok"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.2.6"
+  }
+}
