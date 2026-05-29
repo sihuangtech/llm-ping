@@ -30,6 +30,13 @@ API 监听地址：
 http://127.0.0.1:4545
 ```
 
+Provider 配置和检测历史默认保存在 `llm-ping.db`。如果要换数据库路径，可以设置 `LLM_PING_DB`：
+
+```bash
+$env:LLM_PING_DB="D:\data\llm-ping.db"
+pnpm --filter @llm-ping/server dev
+```
+
 ## 运行 Web 应用
 
 打开第二个终端，启动 Web UI：
@@ -45,6 +52,18 @@ http://127.0.0.1:5173
 ```
 
 Web UI 和 Tauri 桌面端复用同一套 React 前端代码。
+
+## 使用 Web 应用
+
+1. 打开 `Providers`。
+2. 填写 Provider 配置：`type`、`baseUrl`、`apiKey` 或 `accessToken`、`model`、`deployment`、`apiVersion`、`timeoutMs`、`retries`、`headers`，以及可选的 streaming 设置。
+3. 点击 `保存配置`，Provider 会写入本地 SQLite 数据库。
+4. 在 Provider 列表里点击播放按钮，检测单个 Provider。
+5. 打开 `Batch`，批量检测所有启用的 Provider。
+6. 打开 `History`，查看历史检测记录。
+7. 打开 `Export`，导出报告。
+
+示例 YAML 文件已经移除。正常产品路径是通过 GUI 或 CLI 写入数据库。
 
 ## 运行 CLI
 
@@ -64,6 +83,12 @@ pnpm --filter @llm-ping/cli dev init
 
 ```bash
 pnpm --filter @llm-ping/cli dev check --output pretty
+```
+
+也可以不保存 Provider，直接执行一次临时检测：
+
+```bash
+pnpm --filter @llm-ping/cli dev check --type openai --base-url https://api.openai.com --api-key $env:OPENAI_API_KEY --model gpt-4o-mini
 ```
 
 运行持续监控模式：

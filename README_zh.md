@@ -39,6 +39,8 @@ pnpm --filter @llm-ping/cli dev monitor --interval 60
 pnpm --filter @llm-ping/cli dev check --output json
 ```
 
+默认情况下，CLI 会从本地 SQLite 数据库 `llm-ping.db` 读取 Provider。可以通过 `--db <path>` 或 `LLM_PING_DB` 修改数据库路径。
+
 ## 本地 API 服务
 
 ```bash
@@ -66,6 +68,17 @@ pnpm --filter @llm-ping/web dev
 打开 `http://127.0.0.1:5173`。
 
 界面包含 Dashboard、Provider 管理、批量检测、Monitor、History、Export 和 Settings 页面。
+
+典型使用流程：
+
+- 打开 `Providers`。
+- 填写 Provider 类型、Base URL、API key 或 access token、模型名称、timeout、retries、headers 和 streaming 选项。
+- 在 Provider 列表里点击测试按钮，执行单个 Provider 检测。
+- 打开 `Batch`，批量检测所有启用的 Provider。
+- 打开 `History`，查看历史检测结果。
+- 打开 `Export`，导出 JSON、CSV、Markdown 或 HTML 报告。
+
+Provider 配置和检测历史默认保存在 `llm-ping.db`。Web UI、本地 API 服务和 CLI 共用同一个数据库。
 
 ## Docker
 

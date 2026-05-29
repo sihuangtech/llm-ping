@@ -1,6 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@source "./**/*.{ts,tsx}";
+
+@theme {
+  --color-ink: #17202a;
+  --color-panel: #ffffff;
+  --color-line: #d9e2ec;
+  --color-brand: #0f766e;
+}
 
 body {
   margin: 0;

@@ -30,6 +30,12 @@ The API listens on:
 http://127.0.0.1:4545
 ```
 
+Provider configuration and check history are stored in `llm-ping.db` by default. Set `LLM_PING_DB` to use a different database file:
+
+```bash
+LLM_PING_DB=./data/llm-ping.db pnpm --filter @llm-ping/server dev
+```
+
 ## Run The Web App
 
 In a second terminal, start the Web UI:
@@ -45,6 +51,19 @@ http://127.0.0.1:5173
 ```
 
 The Web UI uses the same React code that is packaged into the Tauri desktop app.
+
+## Use The Web App
+
+1. Open `Providers`.
+2. Fill in the Provider configuration:
+   `type`, `baseUrl`, `apiKey` or `accessToken`, `model`, `deployment`, `apiVersion`, `timeoutMs`, `retries`, `headers`, and optional streaming settings.
+3. Click `保存配置` / `Save` to write the Provider into the local SQLite database.
+4. Click the play button in the Provider list to test one Provider.
+5. Open `Batch` to test all enabled Providers.
+6. Open `History` to inspect previous checks.
+7. Open `Export` to download reports.
+
+The sample YAML file has been removed. The normal product path is database-backed configuration through the GUI or CLI.
 
 ## Run The CLI
 
@@ -64,6 +83,12 @@ Run checks for enabled providers stored in the database:
 
 ```bash
 pnpm --filter @llm-ping/cli dev check --output pretty
+```
+
+Run an ad-hoc check without saving a Provider:
+
+```bash
+pnpm --filter @llm-ping/cli dev check --type openai --base-url https://api.openai.com --api-key $OPENAI_API_KEY --model gpt-4o-mini
 ```
 
 Run monitor mode:

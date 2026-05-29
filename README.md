@@ -39,6 +39,8 @@ Pure JSON output is safe for automation:
 pnpm --filter @llm-ping/cli dev check --output json
 ```
 
+By default, CLI commands read providers from the local SQLite database `llm-ping.db`. You can change the database path with `--db <path>` or `LLM_PING_DB`.
+
 ## Local API Server
 
 ```bash
@@ -66,6 +68,17 @@ pnpm --filter @llm-ping/web dev
 Open `http://127.0.0.1:5173`.
 
 The UI includes Dashboard, Provider management, batch checks, Monitor, History, Export, and Settings screens.
+
+Typical workflow:
+
+- Open `Providers`.
+- Add a Provider with type, Base URL, API key or access token, model name, timeout, retry count, headers, and streaming options.
+- Click the test button in the Provider list to run a single check.
+- Open `Batch` to check all enabled Providers.
+- Open `History` to inspect previous results.
+- Open `Export` to download JSON, CSV, Markdown, or HTML reports.
+
+Provider configuration and check history are stored in `llm-ping.db` by default. The Web UI, local API server, and CLI share the same database.
 
 ## Docker
 
