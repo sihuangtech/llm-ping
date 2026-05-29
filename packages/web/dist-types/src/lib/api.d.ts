@@ -2,9 +2,9 @@ import type { CheckResult, ProviderCapability, ProviderConfig } from "@llm-ping/
 export declare const api: {
     capabilities: () => Promise<ProviderCapability[]>;
     providers: () => Promise<{
-        type: "openai" | "openai-compatible" | "anthropic" | "gemini" | "azure-openai" | "vertex-gemini" | "ollama" | "lm-studio" | "localai" | "custom";
         id: string;
         name: string;
+        type: "openai" | "openai-compatible" | "anthropic" | "gemini" | "azure-openai" | "vertex-gemini" | "ollama" | "lm-studio" | "localai" | "custom";
         enabled: boolean;
         timeoutMs: number;
         retries: number;
@@ -23,9 +23,9 @@ export declare const api: {
         location?: string | undefined;
     }[]>;
     saveProvider: (provider: ProviderConfig) => Promise<{
-        type: "openai" | "openai-compatible" | "anthropic" | "gemini" | "azure-openai" | "vertex-gemini" | "ollama" | "lm-studio" | "localai" | "custom";
         id: string;
         name: string;
+        type: "openai" | "openai-compatible" | "anthropic" | "gemini" | "azure-openai" | "vertex-gemini" | "ollama" | "lm-studio" | "localai" | "custom";
         enabled: boolean;
         timeoutMs: number;
         retries: number;

@@ -1,0 +1,6 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { StatusBadge } from "./ui";
+export function ResultTable({ results }) {
+    return (_jsxs("table", { className: "w-full border-collapse text-sm", children: [_jsx("thead", { children: _jsxs("tr", { className: "border-b border-line text-left", children: [_jsx("th", { className: "py-2", children: "Provider" }), _jsx("th", { children: "Type" }), _jsx("th", { children: "Status" }), _jsx("th", { children: "Latency" }), _jsx("th", { children: "Error" })] }) }), _jsx("tbody", { children: results.map((result) => (_jsxs("tr", { className: "border-b border-line", children: [_jsx("td", { className: "py-2 font-medium", children: result.providerName }), _jsx("td", { children: result.type }), _jsx("td", { children: _jsx(StatusBadge, { status: result.status }) }), _jsxs("td", { children: [result.latency.totalMs, "ms"] }), _jsx("td", { className: "text-slate-600", children: result.error?.message })] }, result.id))) })] }));
+}
+//# sourceMappingURL=results.js.map

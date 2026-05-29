@@ -40,7 +40,7 @@ export const providerConfigSchema = z.object({
   skipModelList: z.boolean().default(false),
   streaming: z.boolean().default(false),
   customPrompt: z.string().default("Reply with exactly: pong"),
-  headers: z.record(z.string()).default({}),
+  headers: z.record(z.string(), z.string()).default({}),
 });
 
 export type ProviderConfig = z.infer<typeof providerConfigSchema>;

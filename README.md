@@ -29,14 +29,14 @@ pnpm build
 ```bash
 pnpm --filter @llm-ping/cli dev init
 pnpm --filter @llm-ping/cli dev providers
-pnpm --filter @llm-ping/cli dev check --config llm-ping.config.sample.yaml --output pretty
-pnpm --filter @llm-ping/cli dev monitor --config llm-ping.config.sample.yaml --interval 60
+pnpm --filter @llm-ping/cli dev check --output pretty
+pnpm --filter @llm-ping/cli dev monitor --interval 60
 ```
 
 Pure JSON output is safe for automation:
 
 ```bash
-pnpm --filter @llm-ping/cli dev check --config llm-ping.config.sample.yaml --output json
+pnpm --filter @llm-ping/cli dev check --output json
 ```
 
 ## Local API Server

@@ -10,6 +10,7 @@ import {
   exportMarkdown,
   listProviderCapabilities,
   loadProjectConfig,
+  Store,
   validateProvider,
 } from "@llm-ping/core";
 import type { CheckResult } from "@llm-ping/shared";
@@ -17,7 +18,6 @@ import { redactObject } from "@llm-ping/shared";
 import chalk from "chalk";
 import { Command } from "commander";
 import "dotenv/config";
-import YAML from "yaml";
 
 const program = new Command();
 
@@ -32,23 +32,21 @@ program
 
 program
   .command("init")
-  .description("生成配置文件、.env.example 和监控示例")
+  .description("初始化本地数据库和 .env.example")
+  .option("--db <path>", "SQLite 数据库路径，默认 llm-ping.db")
   .option("-f, --force", "覆盖已有文件")
   .action((options) => {
-    writeIfMissing("llm-ping.config.yaml", YAML.stringify(createExampleConfig()), options.force);
+    const store = new Store(resolveDbPath(options.db));
+    for (const provider of createExampleConfig().providers) store.upsertProvider(provider);
     writeIfMissing(".env.example", "OPENAI_API_KEY=sk-your-key\nANTHROPIC_API_KEY=sk-ant-your-key\n", options.force);
-    writeIfMissing(
-      "examples/monitor.yaml",
-      YAML.stringify({ intervalSec: 60, concurrency: 4, providers: ["openai-main", "ollama-local"] }),
-      options.force,
-    );
-    console.log(chalk.green("llm-ping 初始化完成。"));
+    console.log(chalk.green("llm-ping 初始化完成，Provider 示例已写入本地 SQLite 数据库。"));
   });
 
 program
   .command("check")
-  .description("执行单 Provider 或配置文件批量检测")
-  .option("-c, --config <path>", "配置文件路径")
+  .description("执行单 Provider、数据库 Provider 或配置文件批量检测")
+  .option("--db <path>", "SQLite 数据库路径，默认 llm-ping.db")
+  .option("-c, --config <path>", "兼容模式：配置文件路径")
   .option("--type <type>", "Provider 类型")
   .option("--name <name>", "Provider 名称", "adhoc")
   .option("--base-url <url>", "Base URL")
@@ -64,7 +62,8 @@ program
   .action(async (options) => {
     const providers = options.config
       ? loadProjectConfig(options.config).providers.filter((provider) => provider.enabled)
-      : [
+      : options.type
+        ? [
           validateProvider({
             id: "adhoc",
             name: options.name,
@@ -79,21 +78,26 @@ program
             strictModelCheck: Boolean(options.strict),
             streaming: Boolean(options.streaming),
           }),
-        ];
+        ]
+        : new Store(resolveDbPath(options.db)).listProviders().filter((provider) => provider.enabled);
     const results = await Promise.all(providers.map((provider) => checkProvider(provider)));
     printResults(results, options.output);
   });
 
 program
   .command("monitor")
-  .description("持续监控配置文件中的 Provider")
-  .requiredOption("-c, --config <path>", "配置文件路径")
+  .description("持续监控本地数据库或配置文件中的 Provider")
+  .option("--db <path>", "SQLite 数据库路径，默认 llm-ping.db")
+  .option("-c, --config <path>", "兼容模式：配置文件路径")
   .option("-i, --interval <sec>", "检测周期秒数", "60")
   .action(async (options) => {
-    const config = loadProjectConfig(options.config);
+    const store = options.config ? undefined : new Store(resolveDbPath(options.db));
     console.log(chalk.cyan("进入 monitor 模式，按 Ctrl+C 退出。"));
     for (;;) {
-      const results = await Promise.all(config.providers.filter((p) => p.enabled).map((p) => checkProvider(p)));
+      const providers = options.config
+        ? loadProjectConfig(options.config).providers.filter((p) => p.enabled)
+        : store!.listProviders().filter((p) => p.enabled);
+      const results = await Promise.all(providers.map((p) => checkProvider(p)));
       printResults(results, "pretty");
       await new Promise((resolve) => setTimeout(resolve, Number(options.interval) * 1000));
     }
@@ -114,11 +118,14 @@ program
 
 program
   .command("doctor")
-  .description("检查配置常见问题")
-  .requiredOption("-c, --config <path>", "配置文件路径")
+  .description("检查本地数据库或配置文件中的常见问题")
+  .option("--db <path>", "SQLite 数据库路径，默认 llm-ping.db")
+  .option("-c, --config <path>", "兼容模式：配置文件路径")
   .action((options) => {
-    const config = loadProjectConfig(options.config);
-    for (const provider of config.providers) {
+    const providers = options.config
+      ? loadProjectConfig(options.config).providers
+      : new Store(resolveDbPath(options.db)).listProviders();
+    for (const provider of providers) {
       const issues = [
         !provider.baseUrl ? "缺少 baseUrl" : undefined,
         listProviderCapabilities().find((cap) => cap.id === provider.type)?.requiresApiKey && !provider.apiKey
@@ -160,4 +167,8 @@ function render(results: CheckResult[], format: string): string {
 function writeIfMissing(path: string, content: string, force = false): void {
   if (!force && fs.existsSync(path)) return;
   fs.writeFileSync(path, content);
+}
+
+function resolveDbPath(path?: string): string {
+  return path ?? process.env.LLM_PING_DB ?? "llm-ping.db";
 }

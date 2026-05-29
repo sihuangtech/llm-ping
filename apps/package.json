@@ -10,6 +10,6 @@
     "test": "echo tauri-tests-ok"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.2.6"
+    "@tauri-apps/cli": "^2.11.2"
   }
 }

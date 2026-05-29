@@ -1,10 +1,8 @@
 import cors from "@fastify/cors";
-import { checkProvider, exportCsv, exportHtml, exportJson, exportMarkdown, listProviderCapabilities } from "@llm-ping/core";
+import { checkProvider, exportCsv, exportHtml, exportJson, exportMarkdown, listProviderCapabilities, Store } from "@llm-ping/core";
 import { providerConfigSchema } from "@llm-ping/shared";
 import Fastify from "fastify";
 import { z } from "zod";
-
-import { Store } from "./store.js";
 
 const store = new Store(process.env.LLM_PING_DB ?? "llm-ping.db");
 const app = Fastify({ logger: true });

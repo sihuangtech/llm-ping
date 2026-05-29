@@ -54,16 +54,22 @@ List supported providers:
 pnpm --filter @llm-ping/cli dev providers
 ```
 
-Run a check with the sample configuration:
+Initialize the local SQLite database with sample providers:
 
 ```bash
-pnpm --filter @llm-ping/cli dev check --config llm-ping.config.sample.yaml --output pretty
+pnpm --filter @llm-ping/cli dev init
+```
+
+Run checks for enabled providers stored in the database:
+
+```bash
+pnpm --filter @llm-ping/cli dev check --output pretty
 ```
 
 Run monitor mode:
 
 ```bash
-pnpm --filter @llm-ping/cli dev monitor --config llm-ping.config.sample.yaml --interval 60
+pnpm --filter @llm-ping/cli dev monitor --interval 60
 ```
 
 ## Run The Tauri Desktop App
@@ -121,7 +127,7 @@ pnpm --filter @llm-ping/web build
 Generated installers and bundles are written under:
 
 ```text
-apps/desktop-tauri/src-tauri/target/release/bundle
+apps/src-tauri/target/release/bundle
 ```
 
 The exact output files depend on the operating system and installed Tauri toolchain.
@@ -141,4 +147,5 @@ pnpm build
 
 - The current desktop app reuses the Web UI, but it does not yet manage the local API server lifecycle by itself.
 - For now, start `@llm-ping/server` manually before using the Web UI or desktop app.
-- Provider configuration can be created from the GUI. `llm-ping.config.sample.yaml` is only a CLI/developer sample.
+- Provider configuration is stored in the local SQLite database, `llm-ping.db` by default.
+- The GUI and CLI use the same database-backed Provider list.

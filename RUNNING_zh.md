@@ -54,16 +54,22 @@ Web UI 和 Tauri 桌面端复用同一套 React 前端代码。
 pnpm --filter @llm-ping/cli dev providers
 ```
 
-使用示例配置执行检测：
+先初始化本地 SQLite 数据库，写入示例 Provider：
 
 ```bash
-pnpm --filter @llm-ping/cli dev check --config llm-ping.config.sample.yaml --output pretty
+pnpm --filter @llm-ping/cli dev init
+```
+
+检测数据库里已启用的 Provider：
+
+```bash
+pnpm --filter @llm-ping/cli dev check --output pretty
 ```
 
 运行持续监控模式：
 
 ```bash
-pnpm --filter @llm-ping/cli dev monitor --config llm-ping.config.sample.yaml --interval 60
+pnpm --filter @llm-ping/cli dev monitor --interval 60
 ```
 
 ## 运行 Tauri 桌面端
@@ -121,7 +127,7 @@ pnpm --filter @llm-ping/web build
 生成的安装包和 bundle 通常位于：
 
 ```text
-apps/desktop-tauri/src-tauri/target/release/bundle
+apps/src-tauri/target/release/bundle
 ```
 
 具体输出文件会根据操作系统和本机 Tauri 工具链有所不同。
@@ -141,4 +147,5 @@ pnpm build
 
 - 当前桌面端复用 Web UI，但还没有自动管理本地 API 服务生命周期。
 - 现阶段使用 Web UI 或桌面端前，需要手动启动 `@llm-ping/server`。
-- 用户可以在图形界面里新增 Provider 和模型配置，`llm-ping.config.sample.yaml` 只是 CLI/开发者示例。
+- Provider 和模型配置统一保存在本地 SQLite 数据库里，默认文件是 `llm-ping.db`。
+- GUI 和 CLI 使用同一份数据库中的 Provider 列表。

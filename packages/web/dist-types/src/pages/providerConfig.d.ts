@@ -1,0 +1,26 @@
+import { type ProviderConfig } from "@llm-ping/shared";
+export type ProviderFormState = {
+    id: string;
+    name: string;
+    type: string;
+    enabled: boolean;
+    baseUrl: string;
+    apiKey: string;
+    accessToken: string;
+    model: string;
+    deployment: string;
+    apiVersion: string;
+    projectId: string;
+    location: string;
+    timeoutMs: number;
+    retries: number;
+    strictModelCheck: boolean;
+    skipModelList: boolean;
+    streaming: boolean;
+    customPrompt: string;
+    headersText: string;
+};
+export declare const providerDefaults: Record<string, Pick<ProviderFormState, "baseUrl" | "model">>;
+export declare const emptyProviderForm: ProviderFormState;
+export declare function formForProvider(provider: ProviderConfig): ProviderFormState;
+export declare function providerFromForm(form: ProviderFormState): ProviderConfig;

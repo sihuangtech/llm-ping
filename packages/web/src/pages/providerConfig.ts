@@ -121,7 +121,7 @@ function compact(input: Record<string, unknown>) {
 function parseHeaders(text: string): Record<string, string> {
   const trimmed = text.trim();
   if (!trimmed) return {};
-  if (trimmed.startsWith("{")) return z.record(z.string()).parse(JSON.parse(trimmed));
+  if (trimmed.startsWith("{")) return z.record(z.string(), z.string()).parse(JSON.parse(trimmed));
   return Object.fromEntries(
     trimmed.split(/\r?\n/).map((line) => {
       const index = line.indexOf(":");
