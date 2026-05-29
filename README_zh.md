@@ -29,14 +29,14 @@ pnpm build
 ```bash
 pnpm --filter @llm-ping/cli dev init
 pnpm --filter @llm-ping/cli dev providers
-pnpm --filter @llm-ping/cli dev check --config examples/llm-ping.config.yaml --output pretty
-pnpm --filter @llm-ping/cli dev monitor --config examples/llm-ping.config.yaml --interval 60
+pnpm --filter @llm-ping/cli dev check --config llm-ping.config.sample.yaml --output pretty
+pnpm --filter @llm-ping/cli dev monitor --config llm-ping.config.sample.yaml --interval 60
 ```
 
 纯 JSON 输出适合自动化场景：
 
 ```bash
-pnpm --filter @llm-ping/cli dev check --config examples/llm-ping.config.yaml --output json
+pnpm --filter @llm-ping/cli dev check --config llm-ping.config.sample.yaml --output json
 ```
 
 ## 本地 API 服务
