@@ -1,5 +1,6 @@
 import type { PropsWithChildren, ReactNode } from "react";
 export declare function Button(props: PropsWithChildren<{
+    disabled?: boolean;
     onClick?: () => void;
     type?: "button" | "submit";
     variant?: "primary" | "ghost";

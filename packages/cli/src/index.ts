@@ -59,6 +59,7 @@ program
   .option("--strict", "严格模型检测")
   .option("--streaming", "开启 streaming 检测")
   .option("--output <format>", "输出格式: pretty/json/csv/markdown/html", "pretty")
+  .option("--raw", "pretty 输出中展示脱敏后的原始响应摘要")
   .action(async (options) => {
     const providers = options.config
       ? loadProjectConfig(options.config).providers.filter((provider) => provider.enabled)
@@ -81,7 +82,7 @@ program
         ]
         : new Store(resolveDbPath(options.db)).listProviders().filter((provider) => provider.enabled);
     const results = await Promise.all(providers.map((provider) => checkProvider(provider)));
-    printResults(results, options.output);
+    printResults(results, options.output, Boolean(options.raw));
   });
 
 program
@@ -139,7 +140,7 @@ program
 
 program.parseAsync();
 
-function printResults(results: CheckResult[], format: string): void {
+function printResults(results: CheckResult[], format: string, showRaw = false): void {
   if (format === "json") {
     process.stdout.write(exportJson(results));
     return;
@@ -153,6 +154,10 @@ function printResults(results: CheckResult[], format: string): void {
     console.log(color(`${result.providerName} [${result.type}] ${result.status} ${result.latency.totalMs}ms`));
     for (const item of result.items) console.log(`  - ${item.name}: ${item.status} ${item.message}`);
     if (result.error) console.log(`  ${chalk.gray("建议:")} ${result.error.suggestion}`);
+    if (showRaw && result.rawSummary) {
+      console.log(`  ${chalk.gray("原始响应摘要:")}`);
+      console.log(JSON.stringify(redactObject(result.rawSummary), null, 2));
+    }
   }
 }
 

@@ -7,6 +7,7 @@ export type ResultRow = {
   status: string;
   latency: { totalMs: number };
   error?: { message: string };
+  rawSummary?: unknown;
 };
 
 export function ResultTable({ results }: { results: ResultRow[] }) {
@@ -28,7 +29,17 @@ export function ResultTable({ results }: { results: ResultRow[] }) {
             <td>{result.type}</td>
             <td><StatusBadge status={result.status} /></td>
             <td>{result.latency.totalMs}ms</td>
-            <td className="text-slate-600">{result.error?.message}</td>
+            <td className="text-slate-600">
+              {result.error?.message}
+              {result.rawSummary !== undefined && (
+                <details className="mt-1">
+                  <summary className="cursor-pointer text-xs text-brand">Raw</summary>
+                  <pre className="mt-2 max-h-72 overflow-auto whitespace-pre-wrap break-words rounded-md bg-slate-50 p-2 text-xs text-slate-700">
+                    {JSON.stringify(result.rawSummary, null, 2)}
+                  </pre>
+                </details>
+              )}
+            </td>
           </tr>
         ))}
       </tbody>

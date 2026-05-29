@@ -3,8 +3,9 @@ import type { CheckResult, ProviderCapability, ProviderConfig } from "@llm-ping/
 const API_BASE = import.meta.env.VITE_LLM_PING_API ?? "http://127.0.0.1:4545";
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const headers = options?.body ? { "content-type": "application/json", ...options?.headers } : options?.headers;
   const response = await fetch(`${API_BASE}${path}`, {
-    headers: { "content-type": "application/json", ...options?.headers },
+    headers,
     ...options,
   });
   if (!response.ok) throw new Error(await response.text());

@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import clsx from "clsx";
 export function Button(props) {
-    return (_jsx("button", { type: props.type ?? "button", title: props.title, onClick: props.onClick, className: clsx("inline-flex h-9 items-center gap-2 rounded-md border px-3 text-sm font-medium transition", props.variant === "ghost"
+    return (_jsx("button", { type: props.type ?? "button", title: props.title, onClick: props.onClick, disabled: props.disabled, className: clsx("inline-flex h-9 items-center gap-2 rounded-md border px-3 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60", props.variant === "ghost"
             ? "border-line bg-white hover:bg-slate-50"
             : "border-brand bg-brand text-white hover:bg-teal-800"), children: props.children }));
 }

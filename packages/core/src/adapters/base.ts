@@ -1,4 +1,4 @@
-import { type CheckItem, type CheckResult, type ProviderCapability, type ProviderConfig, redactObject, type UsageInfo } from "@llm-ping/shared";
+import { type CheckItem, type CheckResult, type ProviderCapability, type ProviderConfig, type RawHttpSummary, redactObject, type UsageInfo } from "@llm-ping/shared";
 
 import { classifyError } from "../diagnostics/errors.js";
 import { joinUrl, jsonRequest } from "../diagnostics/http.js";
@@ -22,7 +22,7 @@ export abstract class HttpProviderAdapter implements ProviderAdapter {
     const startedMs = performance.now();
     const items: CheckItem[] = [];
     let usage: UsageInfo | undefined;
-    let rawSummary: unknown;
+    const rawSummary: RawHttpSummary[] = [];
     let totalMs = 0;
     let dnsMs: number | undefined;
     let tcpMs: number | undefined;
@@ -42,6 +42,7 @@ export abstract class HttpProviderAdapter implements ProviderAdapter {
       if (!config.skipModelList && this.capability.modelsApi) {
         const modelResult = await this.checkModels(config);
         items.push(modelResult.item);
+        rawSummary.push(modelResult.raw);
         modelListMs = modelResult.item.latencyMs;
       } else {
         items.push({ name: "模型列表检测", status: "skipped", message: "当前配置跳过模型列表检测。" });
@@ -55,7 +56,13 @@ export abstract class HttpProviderAdapter implements ProviderAdapter {
         timeoutMs: config.timeoutMs,
       });
       completionMs = completion.latencyMs;
-      rawSummary = redactObject(completion.body);
+      rawSummary.push({
+        label: "completion",
+        url: spec.url,
+        statusCode: completion.statusCode,
+        latencyMs: completion.latencyMs,
+        body: redactObject(completion.body),
+      });
 
       if (completion.statusCode >= 400) {
         throw Object.assign(new Error("Completion request failed"), {
@@ -143,12 +150,19 @@ export abstract class HttpProviderAdapter implements ProviderAdapter {
     return config.baseUrl;
   }
 
-  protected async checkModels(config: ProviderConfig): Promise<{ item: CheckItem }> {
+  protected async checkModels(config: ProviderConfig): Promise<{ item: CheckItem; raw: RawHttpSummary }> {
     const response = await jsonRequest(this.modelsUrl(config), {
       method: "GET",
       headers: this.authHeaders(config),
       timeoutMs: config.timeoutMs,
     });
+    const raw = {
+      label: "models",
+      url: this.modelsUrl(config),
+      statusCode: response.statusCode,
+      latencyMs: response.latencyMs,
+      body: redactObject(response.body),
+    };
     if (response.statusCode >= 400) {
       throw Object.assign(new Error("Models request failed"), {
         httpStatus: response.statusCode,
@@ -164,6 +178,7 @@ export abstract class HttpProviderAdapter implements ProviderAdapter {
         latencyMs: response.latencyMs,
         suggestion: exists ? undefined : "确认模型名称；兼容网关可关闭 strict model check。",
       },
+      raw,
     };
   }
 

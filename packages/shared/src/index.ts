@@ -131,6 +131,14 @@ export type CheckResult = {
   rawSummary?: unknown;
 };
 
+export type RawHttpSummary = {
+  label: string;
+  url: string;
+  statusCode: number;
+  latencyMs: number;
+  body: unknown;
+};
+
 export type ProviderCapability = {
   id: ProviderType;
   name: string;
