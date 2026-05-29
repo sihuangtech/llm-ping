@@ -7,6 +7,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "predev": "pnpm --filter @llm-ping/shared build && pnpm --filter @llm-ping/core build",
     "dev": "tsx src/index.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src --ext .ts",
