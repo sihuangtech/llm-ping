@@ -1,20 +1,20 @@
 # llm-ping
 
-`llm-ping` is an open-source LLM API health diagnostics platform. It helps teams test connectivity, authentication, model availability, protocol compatibility, latency, usage metadata, streaming capability and operational stability across many LLM providers.
+`llm-ping` is an open-source LLM API health diagnostics platform. It helps teams verify connectivity, authentication, model availability, protocol compatibility, latency, usage metadata, streaming capability, and operational stability across many LLM providers.
 
-Think of it as `ping` for LLM APIs, with the workflows of Postman, Uptime Kuma and AI infrastructure monitoring in one local-first toolkit.
+Think of it as `ping` for LLM APIs, with the workflows of Postman, Uptime Kuma, and AI infrastructure monitoring in one local-first toolkit.
 
 ## Capabilities
 
-- Multi-provider Adapter architecture for OpenAI, OpenAI Compatible gateways, Anthropic Claude, Google Gemini, Azure OpenAI, Vertex AI Gemini, Ollama, LM Studio, LocalAI and custom providers.
-- CLI commands for `check`, `providers`, `init`, `monitor`, `export` and `doctor`.
-- Local Fastify API service bound to `127.0.0.1`.
-- React, TypeScript, Vite and Tailwind Web UI.
-- Tauri desktop shell for Windows, macOS and Linux.
+- Multi-provider adapter architecture for OpenAI, OpenAI Compatible gateways, Anthropic Claude, Google Gemini, Azure OpenAI, Vertex AI Gemini, Ollama, LM Studio, LocalAI, and custom providers.
+- CLI commands for `check`, `providers`, `init`, `monitor`, `export`, and `doctor`.
+- A local Fastify API service bound to `127.0.0.1`.
+- A Web UI built with React, TypeScript, Vite, and Tailwind.
+- A Tauri desktop shell for Windows, macOS, and Linux.
 - SQLite storage for provider configuration and redacted check history.
-- JSON, CSV, Markdown and HTML report export.
+- Export support for JSON, CSV, Markdown, and HTML reports.
 - Unified error classification with repair suggestions.
-- API key, token and sensitive header redaction.
+- Redaction for API keys, tokens, authorization headers, and other sensitive headers.
 
 ## Install
 
@@ -56,7 +56,7 @@ Endpoints include:
 - `GET /history`
 - `GET /export?format=json|csv|markdown|html`
 
-## Web GUI
+## Web UI
 
 ```bash
 pnpm --filter @llm-ping/server dev
@@ -65,7 +65,7 @@ pnpm --filter @llm-ping/web dev
 
 Open `http://127.0.0.1:5173`.
 
-The UI includes Dashboard, Provider management, batch checks, Monitor, History, Export and Settings screens.
+The UI includes Dashboard, Provider management, batch checks, Monitor, History, Export, and Settings screens.
 
 ## Docker
 
@@ -77,7 +77,7 @@ The API is exposed only on localhost: `127.0.0.1:4545`.
 
 ## Provider Adapter Development
 
-Adapters live in `packages/core/src/adapters`. Each Adapter owns:
+Adapters live in `packages/core/src/adapters`. Each adapter owns:
 
 - Request construction
 - Authentication headers
@@ -91,7 +91,7 @@ Register new adapters in `packages/core/src/adapters/registry.ts`.
 
 ## Security
 
-`llm-ping` redacts API keys, access tokens, authorization headers and custom secret headers before storing or exporting results. Debug output must never include full secrets.
+`llm-ping` redacts API keys, access tokens, authorization headers, and custom secret headers before storing or exporting results. Debug output must never include full secrets.
 
 ## Development
 
